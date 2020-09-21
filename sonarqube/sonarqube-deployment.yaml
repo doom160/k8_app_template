@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: sonarqube
+  name: sonarqube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarqube
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: sonarqube
+    spec:
+      volumes:
+      - name: sonarqube-pvc-logs
+        persistentVolumeClaim:
+          claimName: sonarqube-pvc-logs
+      - name: sonarqube-pvc-data
+        persistentVolumeClaim:
+          claimName: sonarqube-pvc-data
+      - name: sonarqube-pvc-extensions
+        persistentVolumeClaim:
+          claimName: sonarqube-pvc-extensions
+      containers:
+      - image: sonarqube:8.4-community
+        name: sonarqube
+        resources: {}
+        ports:
+        - containerPort: 9000
+          name: "sonarport"
+        volumeMounts:
+        - mountPath: "/opt/sonarqube/data"
+          name: sonarqube-pvc-data
+        - mountPath: "/opt/sonarqube/logs"
+          name: sonarqube-pvc-logs
+        - mountPath: "/opt/sonarqube/extentions"
+          name: sonarqube-pvc-extensions
+
+
+status: {}
