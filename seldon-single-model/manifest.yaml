@@ -1,6 +1,46 @@
-NAME: seldon
-LAST DEPLOYED: Thu Oct  1 08:22:17 2020
-NAMESPACE: seldon
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
+---
+# Source: seldon-single-model/templates/seldondeployment.json
+{
+  "kind": "SeldonDeployment",
+  "apiVersion": "machinelearning.seldon.io/v1",
+  "metadata": {
+    "name": "seldon-single-model",
+    "namespace": "seldon",
+    "labels": {}
+  },
+  "spec": {
+      "name": "seldon-single-model",
+      "protocol": "seldon",
+      "transport": "rest",
+    "annotations": {},
+    "predictors": [
+      {
+        "name": "default",
+        "graph": {
+          "name": "model",
+          "type": "MODEL",
+        },
+        "componentSpecs": [
+          {
+            "spec": {
+              "containers": [
+                {
+                  "name": "model",
+                  "env": [
+                      {
+                        "name": "LOG_LEVEL",
+                        "value": "INFO"
+                      },
+                    ],
+                  "resources": {"requests":{"memory":"1Mi"}},
+                }
+              ]
+            },
+          }
+        ],
+        "replicas": 1
+      }
+    ]
+  }
+}
+
